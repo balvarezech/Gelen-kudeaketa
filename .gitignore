@@ -1,12 +1,7 @@
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -23,12 +18,8 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# PyInstaller
 *.manifest
 *.spec
-
-# Unit test / coverage
 htmlcov/
 .tox/
 .coverage
@@ -38,24 +29,16 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
-
-# Jupyter Notebook
 .ipynb_checkpoints
-
-# Environments
 .env
 .venv
 env/
 venv/
 ENV/
-
-# IDE and Editors
 .idea/
 .vscode/
 *.sublime-project
 *.sublime-workspace
-
-# Operating System
 .DS_Store
 Thumbs.db
 Desktop.ini
