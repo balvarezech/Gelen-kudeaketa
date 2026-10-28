@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Ikastetxea Demo: Zornotza (102 kodea) -->
+        <record id="demo_ikastetxea_zornotza" model="ikastetxeak.ikastetxea">
+            <field name="name">Zornotza</field>
+            <field name="kodea">102</field>
+            <field name="helbidea">San Pedro kalea z/g, 48340 Amorebieta-Etxano</field>
+            <field name="telefonoa">946 73 02 51</field>
+            <field name="emaila">idazkaritza@fpzornotzalh.eus</field>
+            <field name="webgunea">https://fpzornotzalh.hezkuntza.net</field>
+            <field name="deskribapena">CIFP Zornotza LHII - Lanbide Heziketako Ikastetxe Integratua</field>
+        </record>
+
+        <!-- Gela Demo: Ethazi (Zornotza ikastetxean, pantaila-argazkiko datu zehatzekin) -->
+        <record id="demo_gela_ethazi" model="ikastetxeak.gela">
+            <field name="name">Ethazi</field>
+            <field name="ikastetxe_id" ref="demo_ikastetxea_zornotza"/>
+            <field name="edukiera">50</field>
+            <field name="baliabideak">sdfgsdgs</field>
+            <field name="kokalekua">lehen solairua</field>
+            <field name="erabilgarri" eval="True"/>
+        </record>
+
+        <!-- Bigarren Gela Demo bat: Informatika 201 -->
+        <record id="demo_gela_informatika" model="ikastetxeak.gela">
+            <field name="name">Informatika 201</field>
+            <field name="ikastetxe_id" ref="demo_ikastetxea_zornotza"/>
+            <field name="edukiera">30</field>
+            <field name="baliabideak">30 ordenagailu, proiektorea, zuntz optikoa</field>
+            <field name="kokalekua">bigarren solairua</field>
+            <field name="erabilgarri" eval="True"/>
+        </record>
+    </data>
+</odoo>

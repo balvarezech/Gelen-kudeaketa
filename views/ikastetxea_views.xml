@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ikastetxeen Zerrenda-bista (Tree/List View) -->
+    <record id="view_ikastetxeak_ikastetxea_tree" model="ir.ui.view">
+        <field name="name">ikastetxeak.ikastetxea.tree</field>
+        <field name="model">ikastetxeak.ikastetxea</field>
+        <field name="arch" type="xml">
+            <tree string="Ikastetxeen zerrenda">
+                <field name="kodea" string="Ikastetxe kodea"/>
+                <field name="name" string="Ikastetxearen izena"/>
+                <field name="helbidea" string="Helbidea"/>
+                <field name="telefonoa" string="Telefonoa"/>
+                <field name="emaila" string="Emaila"/>
+                <field name="gela_kopurua" string="Gela kopurua"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Ikastetxeen Formulario-bista (Form View) -->
+    <record id="view_ikastetxeak_ikastetxea_form" model="ir.ui.view">
+        <field name="name">ikastetxeak.ikastetxea.form</field>
+        <field name="model">ikastetxeak.ikastetxea</field>
+        <field name="arch" type="xml">
+            <form string="Ikastetxea">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Ikastetxearen izena"/>
+                        <h1>
+                            <field name="name" placeholder="adib. Zornotza"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="kodea" string="Ikastetxe kodea"/>
+                            <field name="helbidea" string="Helbidea"/>
+                        </group>
+                        <group>
+                            <field name="telefonoa" string="Telefonoa"/>
+                            <field name="emaila" string="Emaila"/>
+                            <field name="webgunea" string="Webgunea" widget="url"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <!-- Erlazionatutako eremua (One2many): Ikastetxeari lotutako gelak -->
+                        <page string="Gelak" name="gelak_page">
+                            <field name="gela_ids">
+                                <tree editable="bottom">
+                                    <field name="name" string="Gela izena"/>
+                                    <field name="edukiera" string="Edukiera"/>
+                                    <field name="kokalekua" string="Kokalekua"/>
+                                    <field name="baliabideak" string="Eskuragarri dauden baliabideak"/>
+                                    <field name="erabilgarri" string="Erabilgarri"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Deskribapena" name="deskribapena_page">
+                            <field name="deskribapena" placeholder="Ikastetxeari buruzko informazio gehigarria..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Ikastetxeen Bilaketa-bista (Search View) -->
+    <record id="view_ikastetxeak_ikastetxea_search" model="ir.ui.view">
+        <field name="name">ikastetxeak.ikastetxea.search</field>
+        <field name="model">ikastetxeak.ikastetxea</field>
+        <field name="arch" type="xml">
+            <search string="Ikastetxeak Bilatu">
+                <field name="name" string="Ikastetxea"/>
+                <field name="kodea" string="Kodea"/>
+                <field name="helbidea" string="Helbidea"/>
+                <separator/>
+                <filter string="Gelekin" name="has_gelak" domain="[('gela_kopurua', '>', 0)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Ikastetxeen Leiho-ekintza (Action Window) -->
+    <record id="action_ikastetxeak_window" model="ir.actions.act_window">
+        <field name="name">Ikastetxeak</field>
+        <field name="res_model">ikastetxeak.ikastetxea</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_ikastetxeak_ikastetxea_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Sortu zure lehen ikastetxea!
+            </p>
+        </field>
+    </record>
+</odoo>

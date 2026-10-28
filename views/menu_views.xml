@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. Menu Nagusia (App Root Menu) - 2. eta 3. irudietan: 'Ikastetxeak_Kudeatu' -->
+    <menuitem id="menu_ikastetxeak_kudeatu_root"
+              name="Ikastetxeak_Kudeatu"
+              web_icon="gelen_kudeaketa,static/description/icon.png"
+              sequence="10"/>
+
+    <!-- 2. Goi-mailako Azpimenuak (Top-bar categories) -->
+    <!-- Ikastetxeak azpimenua -->
+    <menuitem id="menu_ikastetxeak"
+              name="Ikastetxeak"
+              parent="menu_ikastetxeak_kudeatu_root"
+              sequence="10"/>
+
+    <!-- Gelak azpimenua -->
+    <menuitem id="menu_gelak"
+              name="Gelak"
+              parent="menu_ikastetxeak_kudeatu_root"
+              sequence="20"/>
+
+    <!-- 3. Ekintza-Menuak (Dropdown items) -->
+    <!-- Ikastetxeak -> Ikastetxe zerrenda (3. irudian agertzen dena) -->
+    <menuitem id="menu_ikastetxe_zerrenda"
+              name="Ikastetxe zerrenda"
+              parent="menu_ikastetxeak"
+              action="action_ikastetxeak_window"
+              sequence="10"/>
+
+    <!-- Gelak -> Erreserbak (2. irudian agertzen dena) -->
+    <menuitem id="menu_erreserbak"
+              name="Erreserbak"
+              parent="menu_gelak"
+              sequence="10"/>
+
+    <!-- Gelak -> Gela zerrenda (2. irudian agertzen dena) -->
+    <menuitem id="menu_gela_zerrenda"
+              name="Gela zerrenda"
+              parent="menu_gelak"
+              action="action_ikastetxeko_gelak_window"
+              sequence="20"/>
+</odoo>
