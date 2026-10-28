@@ -1,25 +1,32 @@
 # Gelen Kudeaketa (Ikastetxeak_Kudeatu) — Odoo 17
 
-Odoo 17rako modulu pertsonalizatua, ikastetxeak eta haien gelak era eraginkor eta zentralean kudeatzeko.
+Odoo 17rako modulu pertsonalizatua, ikastetxeak, gelak eta gelen erreserbak era eraginkor eta zentralean kudeatzeko.
 
 Proiektuaren biltegia: [https://github.com/balvarezech/Gelen-kudeaketa](https://github.com/balvarezech/Gelen-kudeaketa)
 
 ---
 
-## 🎯 Proiektuaren Helburua eta 1. Fasea
+## 🎯 Proiektuaren Ezaugarriak
 
-Lehen fase honetan **Ikastetxeak** eta **Gelak** kudeatzeko oinarrizko datu-ereduak, bistak, erlazioak eta menu-egitura osoa garatu dira, zehaztapenekin eta emandako pantaila-argazkiekin bat etorriz:
+Pantaila-argazkietan eta eskakizunetan oinarrituta, **Ikastetxeak**, **Gelak** eta **Erreserbak** kudeatzeko sistema integrala garatu da:
 
 * ✅ **Ikastetxeen zerrenda-bista (Tree/List View)**: Ikastetxe guztiak, haien kodea, kokalekua, kontaktua eta gela kopurua zerrendatuta.
-* ✅ **Ikastetxeen formulario-bista (Form View)**: Datu nagusiak, harremanetarako bideak eta erlazionatutako gelen zerrenda interaktiboa (One2many bidez editagarria).
-* ✅ **Gelen zerrenda-bista (Tree/List View)**: Pantaila-argazkiko elementu guztiekin: Gela izena, Ikastetxe izena, Ikastetxea (Many2one), Erreserbatu botoiak, Edukiera, Kokalekua eta Erabilgarritasuna.
-* ✅ **Gelen formulario-bista (Form View)**: Gela izena, Edukiera, Baliabideak, Kokalekua, Erlazionatutako Ikastetxe izena (related), Ikastetxea hautatzeko hautatzailea, Erabilgarri marka eta Display Name.
-* ✅ **Menu nagusia eta azpimenuak**: `Ikastetxeak_Kudeatu` menu orokorra, `Ikastetxeak` eta `Gelak` azpimenu nagusiak, eta dagozkien ekintza-aukerak (`Ikastetxe zerrenda`, `Erreserbak`, `Gela zerrenda`).
-* ✅ **Erlazionatutako eremuak formularioetan**:
-  * Many2one (`ikastetxe_id`)
-  * One2many (`gela_ids`)
-  * Related Field (`ikastetxe_izena` -> `ikastetxe_id.kodea`, automatikoki bistaratua)
-  * Computed Field (`gela_kopurua` -> `@api.depends('gela_ids')`)
+* ✅ **Ikastetxeen formulario-bista (Form View)**: Datu nagusiak, kontaktu-taldea eta erlazionatutako gelen zerrenda interaktiboa (One2many bidez editagarria).
+* ✅ **Gelen zerrenda-bista (Tree/List View - 5. irudia)**:
+  * Zutabeak: *Gela izena*, *Ikastetxe izena*, *Ikastetxea*, `[Erreserbatu]` botoia, `[ErreserbatuWizard]` botoia, *Edukiera*, *Kokalekua*, *Erabilgarri*.
+  * Leiho-ekintza: `ikastetxekoGelak window`.
+* ✅ **Gelen formulario-bista (Form View - 1. eta 4. irudiak)**:
+  * Ezker zutabea: *Gela izena*, *Edukiera*, *Eskuragarri dauden baliabideak*, *Kokalekua*, *Ikastetxe izena* (Related eremua).
+  * Eskuin zutabea: *Ikastetxea* (Many2one), *Erabilgarri* (checkbox), *Display Name*.
+  * Erreserben fitxa (Notebook / Page) eta Stat-button-a.
+* ✅ **Erreserben kudeaketa eta Erreserbatu botoiak (5. irudia)**:
+  * `[Erreserbatu]` botoia: Gelatik zuzenean ordu bateko erreserba azkarra sortzen du.
+  * `[ErreserbatuWizard]` botoia: Modal pop-up bat irekitzen du hasiera-data, amaiera-data, erabiltzailea eta oharrak hautatuz erreserba osatzeko.
+  * `ikastetxeak.erreserba` eredua: Egutegi-bista (Calendar), Zerrenda eta Formularioa egoerekin (*zirriborroa*, *baieztatua*, *baliogabetua*).
+* ✅ **Menu nagusia eta azpimenuak (2. eta 3. irudiak)**:
+  * `Ikastetxeak_Kudeatu` aplikazio-menua.
+  * `Ikastetxeak` azpimenua -> `Ikastetxe zerrenda`.
+  * `Gelak` azpimenua -> `Erreserbak` eta `Gela zerrenda`.
 
 ---
 
@@ -28,20 +35,24 @@ Lehen fase honetan **Ikastetxeak** eta **Gelak** kudeatzeko oinarrizko datu-ered
 ```text
 Gelen-kudeaketa/
 ├── data/
-│   └── demo_data.xml               # Hasierako eta frogetako datuak (Zornotza, Ethazi...)
+│   └── demo_data.xml               # Hasierako eta frogetako datuak (Zornotza, Ethazi, Erreserbak...)
 ├── models/
 │   ├── __init__.py                 # Ereduen inportazioak
 │   ├── ikastetxea.py               # 'ikastetxeak.ikastetxea' eredua
-│   └── gela.py                     # 'ikastetxeak.gela' eredua
+│   ├── gela.py                     # 'ikastetxeak.gela' eredua (botoiak barne)
+│   ├── erreserba.py                # 'ikastetxeak.erreserba' eredua
+│   └── erreserba_wizard.py         # 'ikastetxeak.erreserba.wizard' TransientModel (morroia)
 ├── security/
-│   └── ir.model.access.csv         # Baimenak eta sarbide-arauak (base.group_user)
+│   └── ir.model.access.csv         # Sarbide-baimenak (base.group_user)
 ├── static/
 │   └── description/
-│       └── icon.png                # Moduluaren ikono ofiziala aplikazioen taulan
+│       └── icon.png                # Moduluaren ikono ofiziala
 ├── views/
 │   ├── ikastetxea_views.xml        # Ikastetxeen zerrenda, formulario eta bilaketa bistak
-│   ├── gela_views.xml              # Gelen zerrenda, formulario eta bilaketa bistak
-│   └── menu_views.xml              # Menu nagusia eta azpimenu hierarkikoak
+│   ├── gela_views.xml              # Gelen zerrenda, formulario eta bilaketa bistak (5. irudia)
+│   ├── erreserba_views.xml         # Erreserben zerrenda, formulario eta egutegi bistak
+│   ├── erreserba_wizard_views.xml  # Erreserba morroiaren pop-up formularioa
+│   └── menu_views.xml              # Menu nagusia eta azpimenu hierarkikoak (2. eta 3. irudiak)
 ├── .gitignore                      # Git-eko fitxategi baztergarriak
 ├── __init__.py                     # Moduluaren hasieratzailea
 ├── __manifest__.py                 # Odoo 17 manifestua
@@ -53,34 +64,41 @@ Gelen-kudeaketa/
 ## 📊 Datu-Ereduen Xehetasunak (Models)
 
 ### 1. `ikastetxeak.ikastetxea` (Ikastetxeak)
-Ikastetxe bakoitzaren informazioa biltzen du:
 * `name` (*Char*, Beharrezkoa): Ikastetxearen izena (adib. *Zornotza*).
 * `kodea` (*Char*, Beharrezkoa, Bakarra): Ikastetxearen kode ofiziala (adib. *102*).
-* `helbidea` (*Char*): Kokaleku fisikoa edo helbidea.
-* `telefonoa` (*Char*): Harremanetarako telefonoa.
-* `emaila` (*Char*): Harremanetarako posta elektronikoa.
-* `webgunea` (*Char*): Ikastetxearen web ataria.
-* `deskribapena` (*Text*): Ikastetxeari buruzko informazio osagarria.
-* `gela_ids` (*One2many* -> `ikastetxeak.gela`): Ikastetxe honi lotutako gela guztiak.
-* `gela_kopurua` (*Integer*, Kalkulatua): Ikastetxean erregistratutako gela kopurua.
+* `helbidea`, `telefonoa`, `emaila`, `webgunea`, `deskribapena`.
+* `gela_ids` (*One2many* -> `ikastetxeak.gela`): Lotutako gelak.
+* `gela_kopurua` (*Integer*, Kalkulatua): Gela kopurua.
 
 ### 2. `ikastetxeak.gela` (Gelak)
-Ikastetxeetako ikasgela eta espazioak kudeatzen ditu:
 * `name` (*Char*, Beharrezkoa): Gelaren izena (adib. *Ethazi*).
-* `edukiera` (*Integer*): Gelaren ikasle/pertsona kopuru maximoa (adib. *50*).
-* `baliabideak` (*Text*): Gelan eskuragarri dauden baliabideak (adib. *proiektorea, ordenagailuak...*).
-* `kokalekua` (*Char*): Gelaren kokapena eraikinean (adib. *lehen solairua*).
-* `erabilgarri` (*Boolean*): Gela libre edo erabilgarri dagoen adierazten du (Checkbox).
-* `ikastetxe_id` (*Many2one* -> `ikastetxeak.ikastetxea`, Beharrezkoa): Zein ikastetxetakoa den.
-* `ikastetxe_izena` (*Char*, Erlazionatua / *Related*): Ikastetxearen kodea automatikoki lortzen du (`related="ikastetxe_id.kodea"`), formularioan eta zerrendan erakutsiz.
-* `action_erreserbatu()`: Zerrendako *Erreserbatu* botoiaren ekintza.
-* `action_erreserbatu_wizard()`: Zerrendako *ErreserbatuWizard* botoiaren ekintza.
+* `edukiera` (*Integer*): Gelaren edukiera (adib. *50*).
+* `baliabideak` (*Text*): Eskuragarri dauden baliabideak.
+* `kokalekua` (*Char*): Eraikineko kokapena (adib. *lehen solairua*).
+* `erabilgarri` (*Boolean*): Erabilgarri dagoen adierazteko marka.
+* `ikastetxe_id` (*Many2one* -> `ikastetxeak.ikastetxea`): Zein ikastetxeri dagokion.
+* `ikastetxe_izena` (*Char*, Related): `related="ikastetxe_id.kodea"`.
+* `erreserba_ids` (*One2many* -> `ikastetxeak.erreserba`): Gelaren erreserbak.
+* `erreserba_kopurua` (*Integer*, Kalkulatua).
+* `action_erreserbatu()`: 5. irudiko `Erreserbatu` botoia.
+* `action_erreserbatu_wizard()`: 5. irudiko `ErreserbatuWizard` botoia.
+
+### 3. `ikastetxeak.erreserba` (Erreserbak)
+* `name` (*Char*): Erreserbaren kodea (adib. *ERR-20261028-001*).
+* `gela_id` (*Many2one* -> `ikastetxeak.gela`): Erreserbatutako gela.
+* `ikastetxe_id` (*Many2one* -> `ikastetxeak.ikastetxea`, Related).
+* `erabiltzaile_id` (*Many2one* -> `res.users`): Erreserbaren arduraduna.
+* `hasiera_data` (*Datetime*): Erreserbaren hasiera.
+* `amaiera_data` (*Datetime*): Erreserbaren amaiera.
+* `oharrak` (*Text*): Xedea edo arrazoia.
+* `state` (*Selection*): `zirriborroa`, `baieztatua`, `baliogabetua`.
+
+### 4. `ikastetxeak.erreserba.wizard` (Morroia / Wizard)
+* Gelaren erreserba modu interaktiboan kudeatzeko leiho ibiltaria (*TransientModel*).
 
 ---
 
 ## 🖥️ Menuen Egitura
-
-Pantaila-argazkian agertzen den hierarkia zehatza inplementatu da:
 
 ```text
 [Ikastetxeak_Kudeatu] (Menu Nagusia)
@@ -89,39 +107,21 @@ Pantaila-argazkian agertzen den hierarkia zehatza inplementatu da:
 │   └── [Ikastetxe zerrenda]  ──► Ikastetxeen Zerrenda eta Formularioa
 │
 └── [Gelak] (2. Azpimenua)
-    ├── [Erreserbak]          ──► Erreserben kudeaketa (etorkizuneko faseak)
+    ├── [Erreserbak]          ──► Erreserben Zerrenda, Formularioa eta Egutegia
     └── [Gela zerrenda]       ──► ikastetxekoGelak window (Gelen Zerrenda eta Formularioa)
 ```
 
 ---
 
-## 🚀 Nola Instalatu Odoo 17 Zerbitzarian
+## 🚀 Instalazioa
 
-1. **Biltegia klonatu** Odooren gehigarrien direktorioan (`addons_path`):
+1. Biltegia klonatu edo eguneratu Odooren gehigarrien karpetan:
    ```bash
    cd /opt/odoo/custom_addons
    git clone https://github.com/balvarezech/Gelen-kudeaketa.git gelen_kudeaketa
    ```
-
-2. **Odoo Zerbitzaria berrabiarazi**:
+2. Odoo berrabiarazi:
    ```bash
    sudo systemctl restart odoo17
-   # Edo kontsolatik zuzenean exekutatzen bada:
-   # ./odoo-bin -c /etc/odoo17.conf -u gelen_kudeaketa
    ```
-
-3. **Modulua Odoon kargatu**:
-   * Sartu Odoon administratzaile gisa.
-   * Aktibatu Garatzaile Modua (*Developer Mode*): `Ezarpenak` -> `Garatzaile modua aktibatu`.
-   * Joan `Aplikazioak` menura eta egin klik goiko **`Eguneratu Aplikazio Zerrenda`** botoian.
-   * Bilaketa-barran kendu *Aplikazioak* iragazkia eta bilatu `Gelen Kudeaketa` edo `gelen_kudeaketa`.
-   * Egin klik **`Instalatu`** botoian.
-
----
-
-## 👥 Egilea eta Lizentzia
-
-* **Egilea**: balvarezech
-* **Erakundea**: CIFP Zornotza LHII (FP Zornotza)
-* **Bertsioa**: Odoo 17.0 Community / Enterprise
-* **Lizentzia**: LGPL-3
+3. Odoon Aplikazio Zerrenda eguneratu eta modulua instalatu/eguneratu.

@@ -31,5 +31,15 @@
             <field name="kokalekua">bigarren solairua</field>
             <field name="erabilgarri" eval="True"/>
         </record>
+
+        <!-- Demo Erreserba: Ethazi gela Zornotza ikastetxean -->
+        <record id="demo_erreserba_ethazi_1" model="ikastetxeak.erreserba">
+            <field name="name">ERR-20261028-001</field>
+            <field name="gela_id" ref="demo_gela_ethazi"/>
+            <field name="hasiera_data">2026-10-28 10:00:00</field>
+            <field name="amaiera_data">2026-10-28 12:00:00</field>
+            <field name="oharrak">ETHAZI erronkako aurkezpenaren entsegua</field>
+            <field name="state">baieztatua</field>
+        </record>
     </data>
 </odoo>

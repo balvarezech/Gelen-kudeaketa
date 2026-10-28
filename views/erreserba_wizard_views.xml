@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Erreserba Morroiaren Formulario-bista (Wizard Form View) -->
+    <record id="view_ikastetxeak_erreserba_wizard_form" model="ir.ui.view">
+        <field name="name">ikastetxeak.erreserba.wizard.form</field>
+        <field name="model">ikastetxeak.erreserba.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Gela Erreserbatu">
+                <group>
+                    <group>
+                        <field name="gela_id" readonly="1"/>
+                        <field name="ikastetxe_id" readonly="1"/>
+                        <field name="erabiltzaile_id"/>
+                    </group>
+                    <group>
+                        <field name="hasiera_data"/>
+                        <field name="amaiera_data"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="oharrak" placeholder="Erreserbaren azalpena edo arrazoia (adib. ETHAZI talde-lana)..."/>
+                </group>
+                <footer>
+                    <button name="action_erreserbatu" string="Erreserbatu" type="object" class="btn-primary"/>
+                    <button string="Utzi" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

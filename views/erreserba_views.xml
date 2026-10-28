@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Erreserben Zerrenda-bista (Tree/List View) -->
+    <record id="view_ikastetxeak_erreserba_tree" model="ir.ui.view">
+        <field name="name">ikastetxeak.erreserba.tree</field>
+        <field name="model">ikastetxeak.erreserba</field>
+        <field name="arch" type="xml">
+            <tree string="Erreserbak" decoration-info="state == 'zirriborroa'" decoration-success="state == 'baieztatua'" decoration-muted="state == 'baliogabetua'">
+                <field name="name" string="Erreserba kodea"/>
+                <field name="gela_id" string="Gela"/>
+                <field name="ikastetxe_id" string="Ikastetxea"/>
+                <field name="erabiltzaile_id" string="Erabiltzailea"/>
+                <field name="hasiera_data" string="Hasiera data"/>
+                <field name="amaiera_data" string="Amaiera data"/>
+                <field name="state" string="Egoera" widget="badge"
+                       decoration-info="state == 'zirriborroa'"
+                       decoration-success="state == 'baieztatua'"
+                       decoration-muted="state == 'baliogabetua'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Erreserben Formulario-bista (Form View) -->
+    <record id="view_ikastetxeak_erreserba_form" model="ir.ui.view">
+        <field name="name">ikastetxeak.erreserba.form</field>
+        <field name="model">ikastetxeak.erreserba</field>
+        <field name="arch" type="xml">
+            <form string="Erreserba">
+                <header>
+                    <button name="action_baieztatu" string="Baieztatu" type="object" class="btn-primary" invisible="state == 'baieztatua'"/>
+                    <button name="action_baliogabetu" string="Baliogabetu" type="object" class="btn-secondary" invisible="state == 'baliogabetua'"/>
+                    <button name="action_zirriborroa" string="Zirriborro modura itzuli" type="object" invisible="state == 'zirriborroa'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="zirriborroa,baieztatua,baliogabetua"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Erreserba kodea"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Gelaren Datuak">
+                            <field name="gela_id" string="Gela"/>
+                            <field name="ikastetxe_id" string="Ikastetxea"/>
+                            <field name="erabiltzaile_id" string="Erabiltzailea"/>
+                        </group>
+                        <group string="Ordutegia">
+                            <field name="hasiera_data" string="Hasiera data"/>
+                            <field name="amaiera_data" string="Amaiera data"/>
+                        </group>
+                    </group>
+                    <group string="Oharrak / Xehetasunak">
+                        <field name="oharrak" nolabel="1" placeholder="Erreserbaren xedea edo arrazoia adierazi hemen..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Erreserben Egutegi-bista (Calendar View) -->
+    <record id="view_ikastetxeak_erreserba_calendar" model="ir.ui.view">
+        <field name="name">ikastetxeak.erreserba.calendar</field>
+        <field name="model">ikastetxeak.erreserba</field>
+        <field name="arch" type="xml">
+            <calendar string="Erreserben Egutegia" date_start="hasiera_data" date_stop="amaiera_data" color="gela_id" mode="week">
+                <field name="name"/>
+                <field name="gela_id"/>
+                <field name="erabiltzaile_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Erreserben Bilaketa-bista (Search View) -->
+    <record id="view_ikastetxeak_erreserba_search" model="ir.ui.view">
+        <field name="name">ikastetxeak.erreserba.search</field>
+        <field name="model">ikastetxeak.erreserba</field>
+        <field name="arch" type="xml">
+            <search string="Erreserbak Bilatu">
+                <field name="name" string="Kodea"/>
+                <field name="gela_id" string="Gela"/>
+                <field name="ikastetxe_id" string="Ikastetxea"/>
+                <field name="erabiltzaile_id" string="Erabiltzailea"/>
+                <separator/>
+                <filter string="Baieztatuak" name="filter_baieztatua" domain="[('state', '=', 'baieztatua')]"/>
+                <filter string="Nire erreserbak" name="filter_my_reservations" domain="[('erabiltzaile_id', '=', uid)]"/>
+                <group expand="0" string="Taldekatu (Group By)">
+                    <filter string="Gela" name="group_by_gela" context="{'group_by': 'gela_id'}"/>
+                    <filter string="Ikastetxea" name="group_by_ikastetxe" context="{'group_by': 'ikastetxe_id'}"/>
+                    <filter string="Egoera" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Hasiera Data" name="group_by_date" context="{'group_by': 'hasiera_data:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Erreserben Leiho-ekintza (Action Window) -->
+    <record id="action_ikastetxeak_erreserba_window" model="ir.actions.act_window">
+        <field name="name">Erreserbak</field>
+        <field name="res_model">ikastetxeak.erreserba</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="search_view_id" ref="view_ikastetxeak_erreserba_search"/>
+        <field name="context">{'search_default_filter_baieztatua': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Ez dago erreserbarik erregistratuta!
+            </p>
+            <p>
+                Gelen zerrendatik 'Erreserbatu' edo 'ErreserbatuWizard' botoiak erabiliz gela bat erreserbatu dezakezu.
+            </p>
+        </field>
+    </record>
+</odoo>

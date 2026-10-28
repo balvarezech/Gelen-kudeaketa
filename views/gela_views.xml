@@ -9,6 +9,7 @@
                 <field name="name" string="Gela izena"/>
                 <field name="ikastetxe_izena" string="Ikastetxe izena"/>
                 <field name="ikastetxe_id" string="Ikastetxea"/>
+                <!-- 5. irudiko 'Erreserbatu' eta 'ErreserbatuWizard' botoiak -->
                 <button name="action_erreserbatu" string="Erreserbatu" type="object" icon="fa-calendar-plus-o" class="btn-primary"/>
                 <button name="action_erreserbatu_wizard" string="ErreserbatuWizard" type="object" icon="fa-calendar-check-o" class="btn-secondary"/>
                 <field name="edukiera" string="Edukiera"/>
@@ -25,6 +26,11 @@
         <field name="arch" type="xml">
             <form string="Gela">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_erreserbak" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="erreserba_kopurua" widget="statinfo" string="Erreserbak"/>
+                        </button>
+                    </div>
                     <group>
                         <group>
                             <field name="name" string="Gela izena"/>
@@ -39,6 +45,19 @@
                             <field name="display_name" string="Display Name" readonly="1"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Erreserbak" name="erreserbak_page">
+                            <field name="erreserba_ids">
+                                <tree editable="bottom">
+                                    <field name="name" string="Kodea" readonly="1"/>
+                                    <field name="erabiltzaile_id" string="Erabiltzailea"/>
+                                    <field name="hasiera_data" string="Hasiera data"/>
+                                    <field name="amaiera_data" string="Amaiera data"/>
+                                    <field name="state" string="Egoera" widget="badge"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

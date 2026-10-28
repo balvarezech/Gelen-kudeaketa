@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
 from odoo import models, fields, api, _
 
 class Gela(models.Model):
@@ -48,30 +49,73 @@ class Gela(models.Model):
         help='Erlazionatutako ikastetxearen kodea/identifikatzailea'
     )
 
+    # Erreserben zerrenda eta kopurua
+    erreserba_ids = fields.One2many(
+        comodel_name='ikastetxeak.erreserba',
+        inverse_name='gela_id',
+        string='Erreserbak'
+    )
+    erreserba_kopurua = fields.Integer(
+        string='Erreserba kopurua',
+        compute='_compute_erreserba_kopurua',
+        store=True
+    )
+
+    @api.depends('erreserba_ids')
+    def _compute_erreserba_kopurua(self):
+        for rec in self:
+            rec.erreserba_kopurua = len(rec.erreserba_ids)
+
     def action_erreserbatu(self):
-        """Zerrendako 'Erreserbatu' botoia sakatzean exekutatzen den ekintza"""
+        """Zerrendako 'Erreserbatu' botoia sakatzean zuzenean erreserba bat sortzen du (1 ordukoa)"""
         self.ensure_one()
+        now = fields.Datetime.now()
+        end = now + timedelta(hours=1)
+        erreserba = self.env['ikastetxeak.erreserba'].create({
+            'gela_id': self.id,
+            'hasiera_data': now,
+            'amaiera_data': end,
+            'oharrak': f'{self.name} gelaren erreserba azkarra',
+            'state': 'baieztatua',
+        })
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'title': _('Erreserba'),
-                'message': _('%(gela)s gela ondo erreserbatu da!', gela=self.name),
+                'title': _('Gela Erreserbatua!'),
+                'message': _('%(gela)s gela ondo erreserbatu da (Kodea: %(kodea)s)!',
+                             gela=self.name, kodea=erreserba.name),
                 'type': 'success',
                 'sticky': False,
             }
         }
 
     def action_erreserbatu_wizard(self):
-        """Zerrendako 'ErreserbatuWizard' botoia sakatzean exekutatzen den ekintza"""
+        """Zerrendako 'ErreserbatuWizard' botoia sakatzean erreserba morroia irekitzen du"""
+        self.ensure_one()
+        now = fields.Datetime.now()
+        end = now + timedelta(hours=2)
+        return {
+            'name': _('Erreserbatu: %s') % self.name,
+            'type': 'ir.actions.act_window',
+            'res_model': 'ikastetxeak.erreserba.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_gela_id': self.id,
+                'default_hasiera_data': now,
+                'default_amaiera_data': end,
+            }
+        }
+
+    def action_view_erreserbak(self):
+        """Gelaren erreserba guztiak ikusteko ekintza (Stat button)"""
         self.ensure_one()
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _('Erreserbatu Wizard'),
-                'message': _('%(gela)s gelaren erreserba laguntzailea prestatzen...', gela=self.name),
-                'type': 'info',
-                'sticky': False,
-            }
+            'name': _('Erreserbak: %s') % self.name,
+            'type': 'ir.actions.act_window',
+            'res_model': 'ikastetxeak.erreserba',
+            'view_mode': 'tree,form,calendar',
+            'domain': [('gela_id', '=', self.id)],
+            'context': {'default_gela_id': self.id},
         }

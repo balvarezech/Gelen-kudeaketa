@@ -27,10 +27,11 @@
               action="action_ikastetxeak_window"
               sequence="10"/>
 
-    <!-- Gelak -> Erreserbak (2. irudian agertzen dena) -->
+    <!-- Gelak -> Erreserbak (2. irudian agertzen dena, orain bere ekintzarekin lotuta) -->
     <menuitem id="menu_erreserbak"
               name="Erreserbak"
               parent="menu_gelak"
+              action="action_ikastetxeak_erreserba_window"
               sequence="10"/>
 
     <!-- Gelak -> Gela zerrenda (2. irudian agertzen dena) -->
